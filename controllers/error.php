@@ -1,6 +1,8 @@
 <?php
 
 function ErrorController_notFound() {
-	echo '404';
+	showTemplate('error', [
+		'errorText' => getMessage('page_not_found'),
+	]);
 }
 
