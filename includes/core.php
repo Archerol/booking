@@ -10,3 +10,4 @@ if (!defined('SITE_ROOT'))  define('SITE_ROOT',  'http://archerol.net/');
 
 include( LOCAL_ROOT . '/includes/functions.php' );
 
+loadLanguage(getConfig('main')['locale']);

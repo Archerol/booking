@@ -5,4 +5,6 @@ return [
 	'site_root'  => SITE_ROOT,
 
 	'session_lifetime'  => 604800,
+
+	'locale'  => 'ru',
 ];

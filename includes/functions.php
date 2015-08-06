@@ -21,11 +21,49 @@ function &loadConfig($name) {
 	return $Config;
 }
 
+/**
+ * Function for getting error code based on error name
+ */
+function getError($key) {
+	$errors = getConfig('errors');
+
+	if (array_key_exists($key, $errors)) {
+		return $errors[$key];
+	} else {
+		return $errors['unknown_error'];
+	}
+}
+
+/**
+ * Function for getting translated message from lang
+ */
+function getMessage($messageKey) {
+	$lang = loadLanguage();
+	if (array_key_exists($messageKey, $lang)) {
+		return $lang[$messageKey];
+	} else {
+		return $messageKey;
+	}
+}
+
+function loadLanguage($setLocale = null) {
+	static $locale;
+
+	if (!empty($setLocale)) {
+		$locale = $setLocale;
+	}
+
+	if (empty($locale)) {
+		return false;
+	}
+
+	return getConfig('lang/'.$locale);
+}
+
 
 function loadModule($module) {
 	require_once(LOCAL_ROOT . "/modules/$module.php");
 }
-
 
 /**
  * Show template.
