@@ -1,0 +1,158 @@
+/* Global styles */
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	line-height: 1.4;
+	color: #333;
+	margin: 0;
+}
+
+.container {
+	max-width: 970px;
+	min-width: 480px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.clearfix:before,
+.clearfix:after {
+	display: table;
+  content: " ";
+}
+.clearfix:after {
+	clear: both;
+}
+
+.pull-left {
+	float: left;
+}
+
+.pull-right {
+	float: right;
+}
+
+.h1 {
+	margin: 0px;
+	font-weight: 400;
+	font-size: 26px;
+	margin-bottom: 30px;
+}
+
+a {
+	color: #333;
+	text-decoration: none;
+}
+a.link {
+	color: #276AE8;
+}
+
+input, textarea, select {
+	border: 1px solid darkgrey;
+	border-radius: 1px;
+	outline: none;
+}
+
+input, textarea {
+	padding: 5px 5px;
+}
+
+select {
+	padding: 4px 2px;
+}
+
+button {
+	height: 25px;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+table {
+	border-spacing: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+/* Navbar */
+
+.block-navbar {
+	background-color: #E8E8E8;
+	margin-bottom: 40px;
+}
+.block-navbar .logo {
+	float: left;
+	font-size: 28px;
+	color: #5E3951;
+	text-decoration: none;
+	
+}
+
+.block-navbar .logo, 
+.block-navbar .menu-item {
+	height: 60px;
+	line-height: 60px;
+}
+.block-navbar .menu {
+	position: relative;
+	float: right;
+	margin: 0 -15px;
+	padding-left: 0;
+}
+.block-navbar .menu-item {
+	display: block;
+	float: left;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: default;
+	font-size: 15px;
+	box-sizing: border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+.block-navbar .menu-item:not(.disabled):hover {
+	cursor: pointer;
+	border-bottom: solid 4px #ffdb3c;
+	transition: border-bottom-width 0.25s ease-in-out;
+}
+.block-navbar .menu-item.active {
+	background-color: #ffdb3c;
+}
+.block-navbar .login-container {
+	display: none;
+	position: absolute;
+	top: 100%;
+	background-color: #E8E8E8;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.block-navbar .login-form {
+	padding: 15px;
+}
+
+.block-navbar .login-form input,
+.block-navbar .login-form select {
+	margin: 5px 0 15px;
+	border: 1px solid darkgrey;
+	border-radius: 1px;
+	outline: none;
+}
+
+.block-navbar .login-form select {
+	width: 100%;
+}
+
+.block-navbar .button-container {
+	text-align: center;
+}
+
+
+
+

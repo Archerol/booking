@@ -27,3 +27,32 @@ function loadModule($module) {
 }
 
 
+/**
+ * Show template.
+ * 
+ * @param string $template  Name of template
+ *
+ * @param array $vars  Variabels sended into template
+ *
+ * @param boolead $return  If true returns template instead showing. (Used in ajax)
+ */
+function showTemplate($template, $vars = [], $return = false) {
+	foreach ($vars as $key => $value) {
+		${$key} = $value;
+	}
+
+	if (!$return) 
+	{
+		include(LOCAL_ROOT . "/templates/$template.php");
+	} 
+	else 
+	{
+		ob_start();
+		include(LOCAL_ROOT . "/templates/$template.php");
+		$html = ob_get_contents();
+		ob_end_clean();
+
+		return $html;
+	}
+}
+
