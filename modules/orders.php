@@ -2,6 +2,8 @@
 loadConfig('db');
 loadModule('database');
 
+loadConfig('memcache');
+loadModule('memcache');
 
 function Orders_db() {
 	return Database_connect(ORDERS_DB);
@@ -56,6 +58,7 @@ function Orders_createOrder($title, $description, $price, $user) {
 		return getError('database_error');
 	}
 
+	Orders_cacheCreatedOrder($id);
 	
 	return $id;
 }
@@ -106,6 +109,7 @@ function Orders_getOrderList($status, $offset, $limit, &$count = NULL) {
 	{
 		$where = "WHERE status = 'created'";
 		$joinColumn = 'customer_id';
+		$memcache = true;
 	} 
 	else // orders history for user
 	{
@@ -124,34 +128,55 @@ function Orders_getOrderList($status, $offset, $limit, &$count = NULL) {
 		}
 
 		$where = " WHERE status = 'done' AND $currentUserCol = ".intval(User_currentUser()['id']);
+		$memcache = false;
 	}
 
-	$q = "SELECT COUNT(*) as count
-				FROM Orders 
-				$where";
-	$result = Database_query(Orders_db(), $q, $status);
-	$count = Database_selectCell($result);
+
+
+	// get full count of list
+	if ( !($memcache && Orders_mc() && $count = MCache_get(Orders_mc(), 'Orders_count'))) 
+	{
+		$q = "SELECT COUNT(*) as count
+					FROM Orders 
+					$where";
+		$result = Database_query(Orders_db(), $q, $status);
+		$count = Database_selectCell($result);
+
+		if ($memcache) {
+			MCache_set(Orders_mc(), 'Orders_count', $count);
+		}
+	}
 
 
 	// get current range
-	$q = "SELECT Orders.id, title, description, price, customer_id, performer_id
-				FROM Orders
-				INNER JOIN 
-				(
-					SELECT id 
-					FROM Orders 
-					$where
-					ORDER BY id DESC
-					LIMIT ?i, ?i
-				) as ids
-				ON Orders.id = ids.id
-				ORDER BY id DESC";
+	if ($memcache && Orders_mc()) {
+		$orderList = MCache_get(Orders_mc(), 'Orders_list');
+	}
 
-	$result = Database_query(Orders_db(), $q, $offset, $limit);
-	$orders = Database_select($result);
+	if (empty($orderList) || ($offset+$limit) > sizeof($orderList)) 
+	{
+		$q = "SELECT Orders.id, title, description, price, customer_id, performer_id
+					FROM Orders
+					INNER JOIN 
+					(
+						SELECT id 
+						FROM Orders 
+						$where
+						ORDER BY id DESC
+						LIMIT ?i, ?i
+					) as ids
+					ON Orders.id = ids.id
+					ORDER BY id DESC";
 
-	$orderList = Orders_joinOrderList($orders, $joinColumn);
+		$result = Database_query(Orders_db(), $q, $offset, $limit);
+		$orders = Database_select($result);
 
+		$orderList = Orders_joinOrderList($orders, $joinColumn);
+
+		if ($memcache && $offset == 0) {
+			MCache_set(Orders_mc(), 'Orders_list', $orderList, 10);
+		}
+	}
 
 	return $orderList;
 }
@@ -236,6 +261,8 @@ function Orders_performOrder($user, $order_id) {
 	Database_commitTransaction(Orders_db());
 	Database_commitTransaction(Orders_transactions_db());
 
+	Orders_cacheRemovePerfomedOrder($order_id);
+
 	return $id;
 }
 
@@ -267,6 +294,64 @@ function Orders_makeTransaction($user_id, $order_id, $value) {
 	return $id;
 }
 
+
+/**
+ * Add created order into Memcache
+ */
+function Orders_cacheCreatedOrder($order_id) {
+
+	if (!Orders_mc()) {
+		return false;
+	}
+
+	if ( !($list = MCache_get(Orders_mc(), 'Orders_list')) ) {
+		return false;
+	}
+
+	$order = Orders_getOrder($order_id);
+	$order['user'] = User_currentUser()['login'];
+
+	array_unshift($list, $order);
+	// check list on max length
+	if (sizeof($list) > getConfig('orders')['orders_cache_max_count']) {
+		array_pop($list);
+	} 
+
+	MCache_set(Orders_mc(), 'Orders_list', $list);
+
+	MCache_increment(Orders_mc(), 'Orders_count', 1);
+
+	return true;
+}
+
+
+/**
+ * Remove perfomed order from Memcache
+ * if it places there
+ */
+function Orders_cacheRemovePerfomedOrder($order_id) {
+
+	if (!Orders_mc()) {
+		return false;
+	}
+
+	if ( !($list = MCache_get(Orders_mc(), 'Orders_list')) ) {
+		return false;
+	}
+
+	foreach ($list as $i => $order) {
+		if ($order['id'] == $order_id) {
+			unset($list[$i]);
+			$list = array_values($list);
+			MCache_set(Orders_mc(), 'Orders_list', $list);
+			break;
+		}
+	}
+
+	MCache_decrement(Orders_mc(), 'Orders_count', 1);
+
+	return true;
+}
 
 
 
