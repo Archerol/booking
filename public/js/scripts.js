@@ -113,3 +113,105 @@ $(document).on('click', '#loginButton',    ajaxLogin('/login', '#loginForm'));
 $(document).on('click', '#logoutButton',   ajaxLogin('/logout', null));
 
 
+
+
+// Create order
+
+$(document).on('click', '.js-createOrder', function() {
+	window.location = "/create-order";
+})
+
+$(document).on('click', '#createOrderButton', function(e) {
+	e.preventDefault();
+	sendAjax('/createOrder', $('#createOrderFrom').serialize(), {
+		success: function(response) { 
+			alert(response.message);
+			window.location = "/";
+		}
+	});
+})
+
+$(document).on('click', '#cancelOrderButton', function(e) {
+	e.preventDefault();
+	window.location = "/";
+})
+
+
+
+
+// OrderList
+
+var loadOrderList = function(args, callback) {
+	sendAjax('/orderList', args, 
+		{
+			data: function(response) {
+				$("#orderListContainer").html(response.data);
+
+				if ($.isFunction(callback)) callback();
+			},
+		}
+	);
+}
+
+
+$(document).on('click', '.js-orderListTab:not(.active)', function(e) {
+	e.preventDefault();
+
+	var $t = $(this);
+			
+	loadOrderList(
+		{
+			status: $t.data('status'),
+			offset: 0,
+			limit : $('#orderList').data('limit'),
+		}, 
+		function() {
+			$('.js-orderListTab.active').removeClass('active');
+			$t.addClass('active');
+		}
+	);
+})
+
+
+$(document).on('click', '.js-orderListPage:not(.active)', function(e) {
+	e.preventDefault();
+			
+	loadOrderList(
+		{
+			status: $('.js-orderListTab.active').data('status'),
+			offset: $(this).data('offset'),
+			limit : $('#orderList').data('limit'),
+		}
+	);
+})
+
+
+
+//performOrder
+
+$(document).on('click', '.js-performOrder', function() {
+
+	sendAjax('/performOrder', {order_id: $(this).data('id')}, {
+
+		success: function(response) { 
+			alert(response.message);
+			loadOrderList(
+				{
+					status: $('.js-orderListTab.active').data('status'),
+					offset: $('.js-orderListPage.active').data('offset'),
+					limit : $('#orderList').data('limit'),
+				}
+			);
+
+			sendAjax('/getUserMoney', {}, {
+				data: function(response) {
+					$('#userMoney').text(response.data);
+				}
+			});
+
+		}
+
+	});
+
+})
+

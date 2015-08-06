@@ -41,7 +41,6 @@ function Database_setCharset($dbConnect, $charset) {
 	mysqli_set_charset($dbConnect, $charset);
 }
 
-
 /**
  * The function uses prepared statements.
  * Replacement params in mysqli format
@@ -134,6 +133,19 @@ function Database_query($dbConnect, $query)
 }
 
 
+// Transaction functions 
+
+function Database_beginTransaction($dbConnect) {
+	mysqli_begin_transaction($dbConnect);
+}
+
+function Database_commitTransaction($dbConnect) {
+	mysqli_commit($dbConnect);
+}
+
+function Database_rollbackTransaction($dbConnect) {
+	mysqli_rollback($dbConnect);
+}
 
 /**
  * Fetch mysqli_result into Two-dimensional associative array 

@@ -46,6 +46,54 @@ function AjaxController_getUserMoney() {
 }
 
 
+function AjaxController_createOrder($args) {
+	loadModule('orders');
+
+	$errorCode = Orders_createOrder($args['title'], $args['description'], $args['price'], User_currentUser());
+	
+	AjaxController_sendResponse($errorCode, 'create_order_success');
+}
+
+
+function AjaxController_orderList($args) {
+	loadModule('orders');
+
+	$offset = intval($args['offset']);
+	$limit = intval($args['limit']);
+
+	$data = Orders_getOrderList($args['status'], $offset, $limit, $ordersCount);
+
+	if (is_numeric($data) && $data < 0) 
+	{
+		$message = getMessage(getConfig('errors')[$data]);
+		echo json_encode(['status' => 'error', 'message' => $message]);
+	} 
+	else 
+	{
+		$data = showTemplate('orderList', [
+			'orderList' => $data,
+			'ordersCount' => $ordersCount,
+			'offset' => $offset,
+			'limit' => $limit,
+		], true);
+
+		echo json_encode(['status' => 'data', 'data' => $data]);
+	}
+}
+
+
+function AjaxController_performOrder($args) {
+	loadModule('orders');
+
+	$errorCode = Orders_performOrder(User_currentUser(), $args['order_id']);
+
+	AjaxController_sendResponse($errorCode, 'perform_order_success');
+}
+
+
+
+
+
 
 function AjaxController_notFound() {
 	echo json_encode(['status' => 'error', 'message' => getMessage('ajax_invalid_request') ]);

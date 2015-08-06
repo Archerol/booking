@@ -29,5 +29,23 @@ return [
 	'need_auth'                => 'Необходимо авторизоваться.',
 	
 
+	// Orders
+	'create_order_wrong_permission'  => 'Нет прав для создания заказа.',
+	'create_order_need_auth'         => 'Для создания заказа необходимо авторизоваться.',
+	'create_order_empty_title'       => 'Отсутствует название.',
+	'create_order_empty_description' => 'Отсутствует описание.',
+	'create_order_long_title'        => 'Слишком длинное название.',
+	'create_order_long_description'  => 'Слишком длинное описание.',
+	'create_order_wrong_price'       => 'Некорректный формат цены.',
+	'create_order_success'           => 'Заказ создан.',
 
+	'wrong_order_status'             => 'Недопустимый статус заказа.',
+	'order_history_need_auth'        => 'Для просмотра истории необходимо авторизоваться.',
+	
+	'order_list_empty'               => 'К сожалению, Список заказов пуст.',
+	'order_list_empty_page'          => 'Эта страница пуста.',
+	'order_list_try_get_back'        => 'Попробуйте вернуться в начало.',
+
+	'unexpected_comission'           => 'Отсутствует комиссия.',
+	'perform_order_success'          => 'Заказ выполнен.',
 ];

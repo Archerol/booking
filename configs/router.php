@@ -17,6 +17,10 @@ return [
 
 		'/getUserMoney' => 'ajax/AjaxController_getUserMoney',
 
+		'/orderList'    => 'ajax/AjaxController_orderList',
+		'/createOrder'  => 'ajax/AjaxController_createOrder',
+		'/performOrder' => 'ajax/AjaxController_performOrder',
+
 		'/{q}' => 'ajax/AjaxController_notFound', // Ajax 404
 	],
 

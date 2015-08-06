@@ -156,3 +156,154 @@ table {
 
 
 
+
+
+
+
+
+
+/* OrderList */
+
+.block-orders .tab-list { /* header */
+	padding: 0;
+	margin: 0;
+}
+
+.block-orders .tab {
+	display: inline-block;
+	padding-right: 15px;
+	padding-left: 15px;
+	line-height: 40px;
+
+	margin-bottom: -1px;
+	cursor: pointer;
+}
+
+.block-orders .tab.active {
+	cursor: default;
+	border: 1px solid #E0E0E0;
+	border-bottom: 1px solid white;
+	border-radius: 2px;
+}
+
+.block-orders .tab.right {
+	float: right;
+	line-height: 30px;
+	margin-top: 4px;
+	border: 1px solid #E0E0E0;
+	border-radius: 1px;
+	background-color: #ffdb3c;
+}
+
+.block-orders .order-list { /* table */
+	width: 100%;
+	border: 1px solid #E0E0E0;
+	border-radius: 2px;
+}
+
+.block-orders .order-list-header {
+	height: 40px;
+}
+
+.block-orders th {
+	border-bottom: 1px solid #E0E0E0;
+	background-color: #F0F0F0;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.block-orders th,
+.block-orders td {
+	padding: 10px 15px;
+}
+
+.block-orders .order {
+	height: 40px;
+}
+
+.block-orders .order:hover {
+	background-color: #F0F0F0;
+}
+
+.block-orders .user,
+.block-orders .title, 
+.block-orders .price,
+.block-orders .comission {
+	width: 120px;
+}
+
+.block-orders .perform {
+	width: 1px;
+}
+
+
+
+.block-orders .message {
+	height: 40px;
+}
+
+
+
+.block-orders .paging {
+	line-height: 30px;
+	padding: 15px 0;
+	text-align: right;
+}
+
+.block-orders .page-link {
+	font-size: 16px;
+	text-decoration: none;
+	padding-left: 3px;
+	border: 1px solid #ADADAD;
+	border-radius: 2px;
+	padding: 4px 8px;
+	margin: 0 3px;
+}
+
+.block-orders .page-link.active{
+	color: #C0C0C0;
+	border-color: #E0E0E0;
+	cursor: default;
+}
+
+
+
+
+
+
+
+
+
+/* Create Order */
+
+.create-order .form-group {
+	display: block;
+	width: 500px;
+}
+
+.create-order .form-group.small {
+	width: 200px;
+}
+
+
+.create-order label {
+	display: block;
+}
+
+.create-order input, .create-order textarea {
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	box-sizing: border-box;
+}
+
+
+.create-order .input-description {
+	width: 100%;
+	max-width: 100%;
+	height: 120px;
+}
+
+.create-order button {
+	width: 85px;
+}
